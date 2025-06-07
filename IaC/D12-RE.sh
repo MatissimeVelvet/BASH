@@ -69,11 +69,5 @@ skip_php==2 {
 nginx -t
 
 # 检查是否测试成功
-if grep -q 'test is successful' <(nginx -t); then
-  # 如果成功，则重启 nginx
-  systemctl restart nginx
-  echo "Nginx configuration test successful. Nginx has been restarted."
-else
-  echo "Error: Nginx configuration test failed." >&2
-  exit 1
-fi
+
+systemctl restart nginx
