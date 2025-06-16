@@ -4,7 +4,7 @@
 apt -y update
 apt -y upgrade
 timedatectl set-timezone Asia/Shanghai
-apt -y install vim nano gcc rsync p7zip-full unzip curl wget sshpass nload snmp snmpd net-tools tree iftop sudo nmap make git apache2-utils
+apt -y install vim nano gcc rsync p7zip-full unzip curl wget sshpass nload snmp snmpd net-tools tree iftop sudo nmap make git apache2-utils expect
 
 apt -y install python3-pip
 pip install --break-system-packages python-docx openpyxl python-pptx PyMuPDF xlrd pyth
