@@ -1,0 +1,5 @@
+aws ec2 describe-images \
+  --owners amazon \
+  --filters "Name=platform,Values=windows" "Name=state,Values=available" \
+  --query "sort_by(Images,&CreationDate)[-10:].{AMI_ID:ImageId,Name:Name,Date:CreationDate}" \
+  --output table
