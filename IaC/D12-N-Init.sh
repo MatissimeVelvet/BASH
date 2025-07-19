@@ -9,9 +9,16 @@ apt -y install vim nano gcc rsync p7zip-full unzip curl wget sshpass nload snmp 
 apt -y install python3-pip
 pip install --break-system-packages python-docx openpyxl python-pptx PyMuPDF xlrd pyth
 
-pip install openai  --break-system-packages
-apt  -y install npm
+# 安装 OpenAI Python SDK
+pip install openai --break-system-packages
+
+# 添加 Node.js 22.x LTS 官方仓库并安装（含 npm）
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -  
+apt-get install -y nodejs                            
+
+# 全局安装 pm2
 npm install -g pm2
+
 
 apt install -y apt-transport-https lsb-release ca-certificates wget
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
