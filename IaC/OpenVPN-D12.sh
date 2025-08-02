@@ -205,6 +205,9 @@ EOM
 
 chmod +x ~/openvpn-ca/client-configs/make_config.sh
 ~/openvpn-ca/client-configs/make_config.sh CUBE
+~/openvpn-ca/client-configs/make_config.sh CUBE01
+~/openvpn-ca/client-configs/make_config.sh CUBE02
+~/openvpn-ca/client-configs/make_config.sh CUBE03
 
 # 12. 输出客户端配置
 cat ~/openvpn-ca/client-configs/files/CUBE.ovpn
