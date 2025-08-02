@@ -154,6 +154,8 @@ SERVER_IP=$(curl -s --fail https://ip.saelink.net/IP/)
 if [ -z "$SERVER_IP" ]; then
   echo "ERROR: 无法获取公网 IP 地址。" >&2
   exit 1
+fi
+
 OUTPUT_FILE="$HOME/openvpn-ca/client-configs/base.conf"
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 cat > "$OUTPUT_FILE" <<EOF
