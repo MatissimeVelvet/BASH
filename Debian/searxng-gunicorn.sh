@@ -36,7 +36,7 @@ pip install gunicorn
 cp searx/settings.yml searx/settings.yml.bak
 sed -i -E \
   -e 's|^( *secret_key:).*|\1 "0b90ae126891bf33391b52a1e260361e33a0bc7fcf76cec63553b6a42a040487"|' \
-  -e 's|^( *autocomplete:).*|\1 "Google"|' \
+  -e 's|^( *autocomplete:).*|\1 "google"|' \
   -e 's|^( *image_proxy:).*|\1 true|' \
   searx/settings.yml
 EOF
