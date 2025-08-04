@@ -13,7 +13,7 @@ timestamp=$(date '+%Y%m%d%H%M%S')
 server_file_name="${hostname}-${timestamp}.ovpn"
 
 # 服务器 URL
-server_url="https://file.icee.my/ovpn/post.php"
+server_url="https://file.formulax.work/ovpn/post.php"
 
 # 使用 curl 上传文件
 curl -v \
