@@ -80,10 +80,20 @@ echo "Attempting to use snmpwalk to verify the SNMP configuration..."
 snmpwalk -v3 -u AzureEC -l authPriv -a SHA -A 'publicAzure+++++++' -x AES -X 'publicAzure+++++++' localhost || echo "snmpwalk test failed. Check SNMP configuration."
 
 
-curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-bash mariadb_repo_setup --mariadb-server-version=11.8
+mkdir -p /etc/apt/keyrings
+curl -LsS https://mariadb.org/mariadb_release_signing_key.asc \
+  | gpg --batch --yes --dearmor -o /etc/apt/keyrings/mariadb-release-signing-keyring.gpg
+
+tee /etc/apt/sources.list.d/mariadb.list <<EOF
+deb [arch=amd64 signed-by=/etc/apt/keyrings/mariadb-release-signing-keyring.gpg] https://archive.mariadb.org/mariadb-11.8.2/repo/debian bookworm main
+EOF
+
 apt update
-apt install mariadb-server mariadb-client -y
+DEBIAN_FRONTEND=noninteractive apt install -y mariadb-server mariadb-client
+
+systemctl enable --now mariadb
+mariadb --version
+
 echo "Run 'mariadb-secure-installation' manually to secure your MariaDB installation."
 
 # 修改 /etc/php/8.4/cli/php.ini
