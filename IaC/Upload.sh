@@ -4,7 +4,7 @@ set -euo pipefail
 # Upload a single, specific file to:
 #   https://<host>/CLI/post.php
 #   form field: file
-#   remote name: <hostname>-<YYYYMMDD>-<original_name>
+#   remote name: original basename from the given absolute path
 #
 # Usage:
 #   bash upload.sh file.example.com /absolute/path/to/file.txt
@@ -15,7 +15,7 @@ set -euo pipefail
 # ---------- Args & endpoint ----------
 if [[ $# -ne 2 ]]; then
   echo "Usage: $0 <host-or-url> </absolute/path/to/file>"
-  echo "Example: $0 file.domain.work /root/name"
+  echo "Example: $0 file.domain.work /root/OpenVPN-SSL/client-configs/files/client1.ovpn"
   exit 1
 fi
 
@@ -61,21 +61,11 @@ if ! command -v curl >/dev/null 2>&1; then
   exit 1
 fi
 
-HOSTNAME_RAW="$(cat /etc/hostname 2>/dev/null || hostname)"
-# sanitize hostname: keep only [A-Za-z0-9._-]
-HOSTNAME_SAFE="$(echo -n "$HOSTNAME_RAW" | tr -cd 'A-Za-z0-9._-')"
-[[ -n "$HOSTNAME_SAFE" ]] || HOSTNAME_SAFE="host"
-
-STAMP="$(date +%Y%m%d)"  # YYYYMMDD
-
 BASENAME="$(basename -- "$SRC")"
-REMOTE_NAME="${HOSTNAME_SAFE}-${STAMP}-${BASENAME}"
 
 g "[+] Upload endpoint : $ENDPOINT"
-g "[+] Hostname prefix : $HOSTNAME_SAFE"
-g "[+] Date stamp      : $STAMP"
 g "[+] Source file     : $SRC"
-g "[+] Remote filename : $REMOTE_NAME"
+g "[+] Remote filename : $BASENAME (preserve original)"
 echo
 
 # ---------- Upload single file ----------
@@ -83,16 +73,16 @@ TMP_RESP="$(mktemp)"
 cleanup(){ rm -f "$TMP_RESP"; }
 trap cleanup EXIT
 
-g "[>] Uploading: $BASENAME  →  $REMOTE_NAME"
+g "[>] Uploading: $SRC  →  $BASENAME"
 
 HTTP_CODE="$(
   curl -sS -o "$TMP_RESP" -w '%{http_code}' \
-    -F "file=@${SRC};filename=${REMOTE_NAME}" \
+    -F "file=@${SRC};filename=${BASENAME}" \
     "$ENDPOINT" || echo "000"
 )"
 
 if [[ "$HTTP_CODE" == "200" ]] && grep -q '"status"[[:space:]]*:[[:space:]]*"success"' "$TMP_RESP"; then
-  g "[✓] OK (HTTP 200) — uploaded as: $REMOTE_NAME"
+  g "[✓] OK (HTTP 200) — uploaded as: $BASENAME"
   exit 0
 else
   e "[✗] FAILED (HTTP ${HTTP_CODE})"
